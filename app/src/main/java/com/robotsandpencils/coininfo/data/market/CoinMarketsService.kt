@@ -6,5 +6,5 @@ import retrofit2.http.Query
 interface CoinMarketsService {
 
     @GET("coin/markets/")
-    suspend fun getCoinMarkets(@Query("id") coinId: String): List<CoinMarketResponse>
+    suspend fun getCoinMarkets(@Query("id") coinId: String): List<CoinMarketDto>
 }
