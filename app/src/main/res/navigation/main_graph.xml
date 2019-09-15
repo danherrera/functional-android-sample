@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/coinsFragment">
+
+    <fragment
+        android:id="@+id/coinsFragment"
+        android:name="com.robotsandpencils.coininfo.presentation.coins.CoinsFragment"
+        android:label="CoinsFragment">
+        <action
+            android:id="@+id/action_coinsFragment_to_coinDetailsFragment"
+            app:destination="@id/coinDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/coinDetailsFragment"
+        android:name="com.robotsandpencils.coininfo.presentation.coindetails.CoinDetailsFragment"
+        android:label="CoinDetailsFragment">
+        <argument
+            android:name="coinId"
+            app:argType="string" />
+    </fragment>
+</navigation>
