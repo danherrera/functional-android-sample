@@ -2,7 +2,7 @@ package com.robotsandpencils.coininfo.data
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.robotsandpencils.coininfo.data.coin.CoinRepositoryImpl
-import com.robotsandpencils.coininfo.data.coin.CoinsService
+import com.robotsandpencils.coininfo.data.coin.TickersService
 import com.robotsandpencils.coininfo.data.coin.TickerItemMapper
 import com.robotsandpencils.coininfo.data.market.CoinMarketMapper
 import com.robotsandpencils.coininfo.data.market.CoinMarketRepositoryImpl
@@ -29,7 +29,7 @@ val dataModule = module {
     }
 
     // coin
-    factory<CoinsService> { get<Retrofit>().create(CoinsService::class.java) }
+    factory<TickersService> { get<Retrofit>().create(TickersService::class.java) }
     factory { TickerItemMapper() }
     single<CoinRepository> { CoinRepositoryImpl(get(), get()) }
 

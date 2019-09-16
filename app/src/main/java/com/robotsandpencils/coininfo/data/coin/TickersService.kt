@@ -2,9 +2,9 @@ package com.robotsandpencils.coininfo.data.coin
 
 import retrofit2.http.GET
 
-interface CoinsService {
+interface TickersService {
 
     @GET("tickers")
-    suspend fun getCoins(): TickersDto
+    suspend fun getTickers(): TickersDto
 
 }
