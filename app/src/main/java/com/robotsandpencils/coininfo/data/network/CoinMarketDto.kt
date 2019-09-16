@@ -1,4 +1,4 @@
-package com.robotsandpencils.coininfo.data.market
+package com.robotsandpencils.coininfo.data.network
 
 import kotlinx.serialization.Serializable
 

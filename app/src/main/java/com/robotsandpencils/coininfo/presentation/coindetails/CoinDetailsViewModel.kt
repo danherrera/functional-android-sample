@@ -1,7 +1,9 @@
 package com.robotsandpencils.coininfo.presentation.coindetails
 
 import androidx.lifecycle.*
-import com.robotsandpencils.coininfo.domain.market.GetMarketsForCoinUseCase
+import arrow.core.ForTry
+import arrow.core.fix
+import com.robotsandpencils.coininfo.data.RequestOperations
 import com.robotsandpencils.coininfo.entities.Market
 import com.robotsandpencils.coininfo.presentation.common.StartEndTextViewModel
 import kotlinx.coroutines.Dispatchers.IO
@@ -10,7 +12,7 @@ import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 
 class CoinDetailsViewModel(
-    private val getMarketsForCoinUseCase: GetMarketsForCoinUseCase
+    private val requestOperations: RequestOperations<ForTry>
 ) : ViewModel() {
 
     private val _markets = MutableLiveData<List<Market>>()
@@ -28,7 +30,13 @@ class CoinDetailsViewModel(
 
     fun getMarkets(coinId: String) {
         viewModelScope.launch {
-            _markets.value = withContext(IO) { getMarketsForCoinUseCase.getMarketsForCoin(coinId) }
+            withContext(IO) { requestOperations.getMarketsForCoin(coinId).fix() }
+                .fold(
+                    ifFailure = {
+                    },
+                    ifSuccess = {
+                        _markets.value = it
+                    })
         }
     }
 }

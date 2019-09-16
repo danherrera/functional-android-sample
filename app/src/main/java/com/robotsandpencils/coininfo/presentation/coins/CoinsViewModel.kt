@@ -4,14 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.robotsandpencils.coininfo.domain.allcoins.GetAllCoinsUseCase
+import arrow.core.ForTry
+import arrow.core.fix
+import com.robotsandpencils.coininfo.data.RequestOperations
 import com.robotsandpencils.coininfo.entities.Coin
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CoinsViewModel(
-    private val getAllCoinsUseCase: GetAllCoinsUseCase
+    private val requestOperations: RequestOperations<ForTry>
 ) : ViewModel() {
 
     private val _coins = MutableLiveData<List<Coin>>()
@@ -23,7 +25,13 @@ class CoinsViewModel(
     fun getData() {
         viewModelScope.launch {
             update(_isLoading) {
-                _coins.value = withContext(IO) { getAllCoinsUseCase.getAllCoins() }
+                withContext(IO) { requestOperations.getAllCoins().fix() }
+                    .fold(
+                        ifFailure = {
+                        },
+                        ifSuccess = {
+                            _coins.value = it
+                        })
             }
         }
     }
