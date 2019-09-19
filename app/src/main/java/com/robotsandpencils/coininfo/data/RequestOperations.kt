@@ -7,9 +7,9 @@ import com.robotsandpencils.coininfo.entities.Market
 
 interface RequestOperations<F> : NetworkOperations<F>, DomainMapper<F> {
 
-    suspend fun getAllCoins(): Kind<F, List<Coin>> =
+    fun getAllCoins(): Kind<F, List<Coin>> =
         requestTickers().toCoinsFromNetwork()
 
-    suspend fun getMarketsForCoin(coinId: String): Kind<F, List<Market>> =
+    fun getMarketsForCoin(coinId: String): Kind<F, List<Market>> =
         requestMarketsForCoin(coinId).toMarketsFromNetwork()
 }

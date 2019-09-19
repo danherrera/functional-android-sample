@@ -1,9 +1,9 @@
 package com.robotsandpencils.coininfo
 
 import android.app.Application
-import arrow.core.ForTry
-import arrow.core.Try
-import arrow.core.extensions.`try`.monadError.monadError
+import arrow.fx.ForIO
+import arrow.fx.IO
+import arrow.fx.extensions.io.monadError.monadError
 import arrow.typeclasses.MonadError
 import com.robotsandpencils.coininfo.data.RequestOperations
 import com.robotsandpencils.coininfo.data.dataModule
@@ -14,8 +14,8 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    factory<RequestOperations<ForTry>> {
-        object : RequestOperations<ForTry>, MonadError<ForTry, Throwable> by Try.monadError() {
+    factory<RequestOperations<ForIO>> {
+        object : RequestOperations<ForIO>, MonadError<ForIO, Throwable> by IO.monadError() {
             override val tickersService: TickersService = get()
         }
     }
