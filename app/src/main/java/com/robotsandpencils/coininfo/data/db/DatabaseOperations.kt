@@ -1,11 +1,11 @@
 package com.robotsandpencils.coininfo.data.db
 
 import arrow.Kind
-import arrow.typeclasses.ApplicativeError
+import arrow.typeclasses.MonadError
 import com.robotsandpencils.coininfo.data.db.coin.CoinDao
 import com.robotsandpencils.coininfo.data.db.coin.CoinEntity
 
-interface DatabaseOperations<F> : ApplicativeError<F, Throwable> {
+interface DatabaseOperations<F> : MonadError<F, Throwable> {
     val coinDao: CoinDao
 
     fun queryCoins(): Kind<F, List<CoinEntity>> =

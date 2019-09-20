@@ -5,18 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import arrow.fx.ForIO
-import arrow.fx.IO
-import arrow.fx.extensions.fx
-import com.robotsandpencils.coininfo.data.RequestOperations
+import arrow.fx.fix
+import com.robotsandpencils.coininfo.data.RepositoryOperations
 import com.robotsandpencils.coininfo.entities.Market
 import com.robotsandpencils.coininfo.presentation.BaseViewModel
 import com.robotsandpencils.coininfo.presentation.common.StartEndTextViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 
 class CoinDetailsViewModel(
-    private val requestOperations: RequestOperations<ForIO>
+    private val repositoryOperations: RepositoryOperations<ForIO>
 ) : BaseViewModel() {
 
     private val _markets = MutableLiveData<List<Market>>()
@@ -33,11 +33,14 @@ class CoinDetailsViewModel(
     }
 
     fun getMarkets(coinId: String) = viewModelScope.launch {
-        IO.fx {
-            continueOn(Dispatchers.IO)
-            val markets = !requestOperations.getMarketsForCoin(coinId)
-            continueOn(Dispatchers.Main)
-            _markets.value = markets
-        }.suspended()
+        withContext(Dispatchers.IO) {
+            repositoryOperations.getMarketsForCoin(coinId).fix()
+                .attempt()
+                .suspended()
+        }.fold({
+            // handle error
+        }, {
+            _markets.value = it
+        })
     }
 }
