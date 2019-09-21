@@ -1,12 +1,10 @@
 package com.robotsandpencils.coininfo.presentation.coins
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import arrow.core.Option
 import arrow.fx.ForIO
 import arrow.fx.fix
 import com.robotsandpencils.coininfo.data.RepositoryOperations
-import com.robotsandpencils.coininfo.entities.Coin
 import com.robotsandpencils.coininfo.presentation.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,25 +12,28 @@ import kotlinx.coroutines.withContext
 
 class CoinsViewModel(
     private val repositoryOperations: RepositoryOperations<ForIO>
-) : BaseViewModel() {
-
-    private val _coins = MutableLiveData<List<Coin>>()
-    val coins: LiveData<List<Coin>> = _coins
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+) : BaseViewModel<CoinsState>(CoinsState()) {
 
     fun getData() = viewModelScope.launch {
-        _isLoading.value = true
+
+        updateState { copy(isLoading = false) }
+
         withContext(Dispatchers.IO) {
+
             repositoryOperations.getAllCoins().fix()
                 .attempt()
                 .suspended()
+
         }.fold({
-            println("")
+
+            updateState { copy(error = Option.just(it)) }
+
         }, {
-            _coins.value = it
+
+            updateState { copy(coins = it, error = Option.empty()) }
+
         })
-        _isLoading.value = false
+
+        updateState { copy(isLoading = false) }
     }
 }

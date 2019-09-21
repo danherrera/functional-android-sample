@@ -9,8 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.robotsandpencils.coininfo.R
 import com.robotsandpencils.coininfo.presentation.common.StartEndTextRecyclerViewAdapter
+import com.robotsandpencils.coininfo.presentation.common.StartEndTextViewModel
 import kotlinx.android.synthetic.main.fragment_coin_details.*
 import org.koin.android.ext.android.inject
+import java.math.RoundingMode
 
 class CoinDetailsFragment : Fragment() {
 
@@ -31,8 +33,18 @@ class CoinDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         marketsRecyclerView.adapter = adapter
         viewModel.getMarkets(args.coinId)
-        viewModel.markets.observe(this, Observer {
-            adapter.viewModels = it ?: emptyList()
-        })
+        viewModel.state.observe(this, Observer(::setState))
+    }
+
+    fun setState(state: CoinDetailsState) {
+        adapter.viewModels = state.markets.map {
+            StartEndTextViewModel(
+                it.name,
+                "${it.price.setScale(
+                    2,
+                    RoundingMode.HALF_UP
+                )} ${it.quoteCurrency}/${it.baseCurrency}"
+            )
+        }
     }
 }

@@ -63,6 +63,9 @@ dependencies {
     implementation "io.arrow-kt:arrow-core:$arrow_version"
     implementation "io.arrow-kt:arrow-core-data:$arrow_version"
     implementation "io.arrow-kt:arrow-fx:$arrow_version"
+    implementation "io.arrow-kt:arrow-ui:$arrow_version"
+    implementation "io.arrow-kt:arrow-ui-data:$arrow_version"
+    implementation "io.arrow-kt:arrow-mtl-data:$arrow_version"
     kapt "io.arrow-kt:arrow-meta:$arrow_version"
 
     def room_version = "2.1.0"

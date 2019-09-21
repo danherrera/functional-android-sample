@@ -36,11 +36,13 @@ class CoinsFragment : Fragment() {
             )
         }
         viewModel.getData()
-        viewModel.coins.observe(this, Observer {
-            adapter.coins = it ?: emptyList()
-        })
-        viewModel.isLoading.observe(this, Observer {
-            swipeRefreshLayout.isRefreshing = it ?: false
-        })
+        viewModel.state.observe(this, Observer(::setState))
+    }
+
+    fun setState(state: CoinsState) {
+        adapter.coins = state.coins
+        coinRecyclerView.visibility = state.error.fold({ View.VISIBLE }, { View.GONE })
+        swipeRefreshLayout.isRefreshing = state.isLoading
+        messageTextView.text = state.error.fold({ "" }, { "Something went wrong." })
     }
 }
