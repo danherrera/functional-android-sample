@@ -1,16 +1,6 @@
 package com.robotsandpencils.coininfo.data.db
 
-import arrow.Kind
-import arrow.typeclasses.MonadError
-import com.robotsandpencils.coininfo.data.db.coin.CoinDao
-import com.robotsandpencils.coininfo.data.db.coin.CoinEntity
+import com.robotsandpencils.coininfo.data.db.coin.CoinDatabaseOperations
+import com.robotsandpencils.coininfo.data.db.market.MarketDatabaseOperations
 
-interface DatabaseOperations<F> : MonadError<F, Throwable> {
-    val coinDao: CoinDao
-
-    fun queryCoins(): Kind<F, List<CoinEntity>> =
-        catch { coinDao.getAll() }
-
-    fun saveCoins(coins: List<CoinEntity>): Kind<F, Unit> =
-        catch { coinDao.insertAll(coins) }
-}
+interface DatabaseOperations<F> : CoinDatabaseOperations<F>, MarketDatabaseOperations<F>

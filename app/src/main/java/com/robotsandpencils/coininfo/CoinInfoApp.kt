@@ -9,6 +9,7 @@ import arrow.typeclasses.MonadError
 import com.robotsandpencils.coininfo.data.RepositoryOperations
 import com.robotsandpencils.coininfo.data.dataModules
 import com.robotsandpencils.coininfo.data.db.coin.CoinDao
+import com.robotsandpencils.coininfo.data.db.market.MarketDao
 import com.robotsandpencils.coininfo.data.network.TickersService
 import com.robotsandpencils.coininfo.presentation.presentationModules
 import org.koin.core.context.startKoin
@@ -27,6 +28,7 @@ class CoinInfoApp : Application() {
                     MonadError<ForIO, Throwable> by IO.monadError() {
                     override val tickersService: TickersService = get()
                     override val coinDao: CoinDao = get()
+                    override val marketDao: MarketDao = get()
                 }
             }
         }

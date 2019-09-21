@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1fd99ec977c79105bd325167972e73be",
+    "identityHash": "09d39adc35d0675ed7f18ceaaed50567",
     "entities": [
       {
         "tableName": "coins",
@@ -41,12 +41,67 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "markets",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `baseCurrency` TEXT NOT NULL, `quoteCurrency` TEXT NOT NULL, `price` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "baseCurrency",
+            "columnName": "baseCurrency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quoteCurrency",
+            "columnName": "quoteCurrency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uid"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_markets_name_baseCurrency_quoteCurrency",
+            "unique": true,
+            "columnNames": [
+              "name",
+              "baseCurrency",
+              "quoteCurrency"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_markets_name_baseCurrency_quoteCurrency` ON `${TABLE_NAME}` (`name`, `baseCurrency`, `quoteCurrency`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1fd99ec977c79105bd325167972e73be')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '09d39adc35d0675ed7f18ceaaed50567')"
     ]
   }
 }

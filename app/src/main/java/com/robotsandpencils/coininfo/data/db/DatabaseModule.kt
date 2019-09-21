@@ -12,4 +12,6 @@ val databaseModule = module {
     }
 
     single { get<CoinInfoDatabase>().coinDao() }
+
+    single { get<CoinInfoDatabase>().marketDao() }
 }
